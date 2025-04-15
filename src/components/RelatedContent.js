@@ -21,24 +21,29 @@ const RelatedContent = ({ deals, onNavigate }) => {
   ];
 
   return (
-    <section className="py-12 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-8">También te puede interesar</h2>
+    <section className="py-5 bg-light">
+      <div className="container px-3">
+        <h2 className="fs-3 fw-bold mb-4">También te puede interesar</h2>
 
         {categories.map((category) => (
-          <div key={category.id} className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold">{category.name}</h3>
+          <div key={category.id} className="mb-5">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h3 className="fs-4 fw-bold mb-0">{category.name}</h3>
               <button
                 onClick={() => onNavigate(category.id)}
-                className="text-red-500 hover:text-red-700 font-medium"
+                className="btn btn-link text-danger text-decoration-none p-0"
               >
                 Explorar {category.name.toLowerCase()} →
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="row g-4">
               {category.deals.map((deal) => (
-                <CategoryCard key={deal.id} offer={deal} />
+                <div key={deal.id} className="col-12 col-md-6 col-lg-4">
+                  {/* Aseguramos altura uniforme */}
+                  <div className="h-100">
+                    <CategoryCard offer={deal} />
+                  </div>
+                </div>
               ))}
             </div>
           </div>
