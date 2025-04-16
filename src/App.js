@@ -1,46 +1,64 @@
-import React, { useState } from 'react';
-import LayoutHeader from './components/LayoutHeader';
-import HeroBanner from './components/HeroBanner';
-import CategoriesSection from './components/CategoriesSection';
-import SearchFilters from './components/SearchFilters';
-import FeaturedDeals from './components/FeaturedDeals';
-import RelatedContent from './components/RelatedContent';
-import PromoBanner from './components/PromoBanner';
-import SpecialOffersCarousel from './components/SpecialOffersCarousel';
-import Newsletter from './components/Newsletter';
-import Footer from './components/Footer';
-import CategoryPage from './components/CategoryPage';
-import ServiceDetailPage from './components/ServiceDetailPage';
-import mockData from './mock/data';
+import React, { useContext, useEffect } from "react";
+import { Context } from "./store/appContext";
 
-const HomePage = ({ onNavigate, onViewService }) => {
-  const [deals, setDeals] = useState(mockData.featuredDeals);
-  
+import LayoutHeader from "./components/LayoutHeader";
+import HeroBanner from "./components/HeroBanner";
+import CategoriesSection from "./components/CategoriesSection";
+import SearchFilters from "./components/SearchFilters";
+import FeaturedDeals from "./components/FeaturedDeals";
+import RelatedContent from "./components/RelatedContent";
+import PromoBanner from "./components/PromoBanner";
+import SpecialOffersCarousel from "./components/SpecialOffersCarousel";
+import Newsletter from "./components/Newsletter";
+import Footer from "./components/Footer";
+import CategoryPage from "./components/CategoryPage";
+import ServiceDetailPage from "./components/ServiceDetailPage";
+import mockData from "./mock/data";
+
+const HomePage = () => {
+  const { store, actions } = useContext(Context);
+  const [deals, setDeals] = React.useState(store.mockData.featuredDeals || []);
+
+  useEffect(() => {
+    if (Object.keys(store.mockData).length === 0) {
+      actions.loadMockData(mockData);
+      setDeals(mockData.featuredDeals);
+    }
+  }, []);
+
   const handleFilter = ({ city, category }) => {
     let filtered = [...mockData.featuredDeals];
-    
+
     if (city) {
-      filtered = filtered.filter(deal => deal.city === city);
+      filtered = filtered.filter((deal) => deal.city === city);
     }
-    
+
     if (category) {
-      filtered = filtered.filter(deal => deal.category === category);
+      filtered = filtered.filter((deal) => deal.category === category);
     }
-    
+
     setDeals(filtered);
   };
 
   return (
     <>
       <HeroBanner />
-      <CategoriesSection onNavigate={onNavigate} />
-      <SearchFilters 
-        cities={mockData.cities} 
-        categories={mockData.categories} 
-        onFilter={handleFilter} 
+      <CategoriesSection onNavigate={actions.setCategory} />
+      <SearchFilters
+        cities={mockData.cities}
+        categories={mockData.categories}
+        onFilter={handleFilter}
       />
-      <FeaturedDeals deals={deals} onNavigate={onNavigate} onViewService={onViewService} />
-      <RelatedContent deals={mockData.featuredDeals} onNavigate={onNavigate} onViewService={onViewService} />
+      <FeaturedDeals
+        deals={deals}
+        onNavigate={actions.setCategory}
+        onViewService={actions.setService}
+      />
+      <RelatedContent
+        deals={mockData.featuredDeals}
+        onNavigate={actions.setCategory}
+        onViewService={actions.setService}
+      />
       <PromoBanner />
       <SpecialOffersCarousel />
       <Newsletter />
@@ -49,61 +67,25 @@ const HomePage = ({ onNavigate, onViewService }) => {
 };
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [currentCategory, setCurrentCategory] = useState(null);
-  const [currentService, setCurrentService] = useState(null);
-
-  const categoryData = {
-    top: {
-      name: 'Top Ofertas',
-      offers: mockData.topOffers
-    },
-    beauty: {
-      name: 'Belleza y Bienestar',
-      offers: mockData.beautyOffers
-    },
-    food: {
-      name: 'Gastronomía',
-      offers: mockData.foodOffers
-    },
-    travel: {
-      name: 'Viajes y Escapadas',
-      offers: mockData.travelOffers
-    }
-  };
-
-  const handleNavigate = (category) => {
-    setCurrentPage('category');
-    setCurrentCategory(category);
-  };
-
-  const handleViewService = (service) => {
-    setCurrentPage('service');
-    setCurrentService(service);
-  };
-
-  const handleBack = () => {
-    setCurrentPage(currentService ? 'category' : 'home');
-    setCurrentService(null);
-  };
+  const { store, actions } = useContext(Context);
 
   return (
     <div className="min-h-screen bg-gray-100">
       <LayoutHeader />
       <main className="container mx-auto px-4 py-8">
-        {currentPage === 'home' ? (
-          <HomePage onNavigate={handleNavigate} onViewService={handleViewService} />
-        ) : currentPage === 'category' ? (
-          <CategoryPage 
-            categoryName={categoryData[currentCategory].name} 
-            offers={categoryData[currentCategory].offers} 
-            onBack={handleBack}
-            onViewService={handleViewService}
+        {store.currentPage === "home" ? (
+          <HomePage />
+        ) : store.currentPage === "category" ? (
+          <CategoryPage
+            categoryName={store.categoryData[store.currentCategory].name}
+            offers={store.categoryData[store.currentCategory].offers}
+            onBack={actions.goBack}
+            onViewService={actions.setService}
           />
         ) : (
-          <ServiceDetailPage 
-            service={currentService} 
-            onBack={handleBack} 
+          <ServiceDetailPage
+            service={store.currentService}
+            onBack={actions.goBack}
           />
         )}
       </main>
@@ -113,5 +95,3 @@ const App = () => {
 };
 
 export default App;
-
-// DONE

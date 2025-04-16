@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import SpecialOffersCarousel from './SpecialOffersCarousel';
+import React, { useState } from "react";
+import SpecialOffersCarousel from "./SpecialOffersCarousel";
 
 const ServiceDetailPage = ({ service, onBack }) => {
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
@@ -18,7 +18,9 @@ const ServiceDetailPage = ({ service, onBack }) => {
       stars.push(
         <svg
           key={i}
-          className={`w-5 h-5 ${i <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+          className={`w-5 h-5 ${
+            i <= rating ? "text-yellow-400" : "text-gray-300"
+          }`}
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -32,30 +34,38 @@ const ServiceDetailPage = ({ service, onBack }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-12">
-        <button 
+        <button
           onClick={onBack}
           className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
         >
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <svg
+            className="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
           Volver
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <img 
-              src={service.image} 
-              alt={service.title} 
+            <img
+              src={service.image}
+              alt={service.title}
               className="w-full h-96 object-cover rounded-xl shadow-lg"
             />
             <div className="mt-8">
               <h1 className="text-3xl font-bold mb-2">{service.title}</h1>
-              
+
               <div className="flex items-center mb-4">
-                <div className="flex mr-4">
-                  {renderStars(service.rating)}
-                </div>
+                <div className="flex mr-4">{renderStars(service.rating)}</div>
                 <span className="text-gray-600">{service.reviews} reseñas</span>
               </div>
 
@@ -67,14 +77,19 @@ const ServiceDetailPage = ({ service, onBack }) => {
                   ${service.originalPrice}
                 </span>
                 <span className="ml-4 bg-red-100 text-red-800 text-sm font-medium px-2.5 py-0.5 rounded">
-                  {Math.round((1 - service.discountPrice/service.originalPrice) * 100)}% OFF
+                  {Math.round(
+                    (1 - service.discountPrice / service.originalPrice) * 100
+                  )}
+                  % OFF
                 </span>
               </div>
 
               <p className="text-gray-700 mb-6">{service.shortDescription}</p>
-              
+
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-2">Descripción detallada</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Descripción detallada
+                </h3>
                 <p className="text-gray-700">{service.longDescription}</p>
               </div>
 
@@ -85,7 +100,8 @@ const ServiceDetailPage = ({ service, onBack }) => {
 
               <div className="bg-blue-50 p-4 rounded-lg mb-6">
                 <p className="text-blue-800 font-medium">
-                  <span className="font-bold">{service.buyers}</span> personas compraron este servicio
+                  <span className="font-bold">{service.buyers}</span> personas
+                  compraron este servicio
                 </p>
               </div>
             </div>
@@ -93,16 +109,21 @@ const ServiceDetailPage = ({ service, onBack }) => {
 
           <div className="bg-white p-8 rounded-xl shadow-lg sticky top-8">
             <h2 className="text-2xl font-bold mb-6">Reservar servicio</h2>
-            
+
             {bookingSuccess ? (
               <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 <p className="font-bold">¡Reserva exitosa!</p>
-                <p>Tu cita para {service.title} ha sido agendada para el {selectedDate} a las {selectedTime}.</p>
+                <p>
+                  Tu cita para {service.title} ha sido agendada para el{" "}
+                  {selectedDate} a las {selectedTime}.
+                </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
                 <div className="mb-6">
-                  <label className="block text-gray-700 font-medium mb-2">Fecha</label>
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Fecha
+                  </label>
                   <input
                     type="date"
                     value={selectedDate}
@@ -113,7 +134,9 @@ const ServiceDetailPage = ({ service, onBack }) => {
                 </div>
 
                 <div className="mb-6">
-                  <label className="block text-gray-700 font-medium mb-2">Hora</label>
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Hora
+                  </label>
                   <select
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
@@ -130,7 +153,9 @@ const ServiceDetailPage = ({ service, onBack }) => {
                 </div>
 
                 <div className="mb-6">
-                  <label className="block text-gray-700 font-medium mb-2">Cantidad</label>
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Cantidad
+                  </label>
                   <div className="flex items-center">
                     <button
                       type="button"

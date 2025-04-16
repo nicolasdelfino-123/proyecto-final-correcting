@@ -1,26 +1,33 @@
-import React, { useState } from "react";
-import LoginModal from "./LoginModal";
-import CartModal from "./CartModal";
+import React, { useState, useContext } from "react";
+import LoginModal from "./LoginModal.js";
+import CartModal from "./CartModal.js";
+import { Context } from "../store/appContext.js";
 
 const LayoutHeader = () => {
+  const { store, actions } = useContext(Context);
   const [location, setLocation] = useState("Madrid");
   const [showLogin, setShowLogin] = useState(false);
   const [showCart, setShowCart] = useState(false);
-  const [cartItems] = useState(2); // Ejemplo
+
+  // Si querés manejar el número de items desde el store, podrías tener algo así:
+  const cartItems = store.cartItems || 2; // Ponele valor por defecto si no está definido aún
 
   return (
     <>
       <header className="sticky-top bg-white shadow-sm">
         <div className="container d-flex align-items-center py-3 flex-wrap">
           {/* Logo */}
-          <div className="d-flex align-items-center me-auto me-md-4">
+          <div
+            className="d-flex align-items-center me-auto me-md-4"
+            role="button"
+            onClick={() => actions.navigateTo("home")}
+          >
             <i className="bi bi-house-fill fs-2 text-danger me-2"></i>
             <h1 className="fs-4 fw-bold mb-0">GrouponClone</h1>
           </div>
 
-          {/* Iconos móviles - visibles solo en pantallas pequeñas */}
+          {/* Iconos móviles */}
           <div className="d-flex d-md-none align-items-center gap-3 order-md-last">
-            {/* Carrito */}
             <div
               className="position-relative"
               onClick={() => setShowCart(true)}
@@ -34,12 +41,10 @@ const LayoutHeader = () => {
               )}
             </div>
 
-            {/* Usuario */}
             <div onClick={() => setShowLogin(true)} role="button">
               <i className="bi bi-person-circle fs-4 text-dark"></i>
             </div>
 
-            {/* Hamburger Menu para pantallas pequeñas */}
             <button
               className="navbar-toggler border-0"
               type="button"
@@ -53,9 +58,7 @@ const LayoutHeader = () => {
             </button>
           </div>
 
-          {/* Contenedor para mantener búsqueda e iconos en línea en pantallas grandes */}
           <div className="d-flex flex-column flex-md-row flex-grow-1 align-items-md-center mt-3 mt-md-0">
-            {/* Buscador */}
             <div className="d-flex flex-grow-1 align-items-center me-md-4">
               <input
                 type="text"
@@ -68,9 +71,7 @@ const LayoutHeader = () => {
               </div>
             </div>
 
-            {/* Menú de navegación - visible en pantallas medianas y grandes */}
             <div className="d-none d-md-flex align-items-center gap-3 ms-auto">
-              {/* Carrito */}
               <div
                 className="position-relative"
                 onClick={() => setShowCart(true)}
@@ -84,7 +85,6 @@ const LayoutHeader = () => {
                 )}
               </div>
 
-              {/* Usuario */}
               <div onClick={() => setShowLogin(true)} role="button">
                 <i className="bi bi-person-circle fs-4 text-dark"></i>
               </div>
@@ -92,31 +92,50 @@ const LayoutHeader = () => {
           </div>
         </div>
 
-        {/* Menú de navegación desplegable para pantallas pequeñas */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav p-3 border-top">
             <li className="nav-item py-2">
-              <a className="nav-link" href="#">
+              <a
+                className="nav-link"
+                href="#"
+                onClick={() => actions.setCategory("top")}
+              >
                 Ofertas del día
               </a>
             </li>
             <li className="nav-item py-2">
-              <a className="nav-link" href="#">
+              <a
+                className="nav-link"
+                href="#"
+                onClick={() => actions.setCategory("food")}
+              >
                 Restaurantes
               </a>
             </li>
             <li className="nav-item py-2">
-              <a className="nav-link" href="#">
+              <a
+                className="nav-link"
+                href="#"
+                onClick={() => actions.setCategory("beauty")}
+              >
                 Belleza y spa
               </a>
             </li>
             <li className="nav-item py-2">
-              <a className="nav-link" href="#">
+              <a
+                className="nav-link"
+                href="#"
+                onClick={() => actions.setCategory("activities")}
+              >
                 Actividades
               </a>
             </li>
             <li className="nav-item py-2">
-              <a className="nav-link" href="#">
+              <a
+                className="nav-link"
+                href="#"
+                onClick={() => actions.setCategory("travel")}
+              >
                 Viajes
               </a>
             </li>
